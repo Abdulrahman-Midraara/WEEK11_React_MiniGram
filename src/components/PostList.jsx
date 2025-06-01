@@ -1,18 +1,23 @@
 import React from 'react';
-import PostCard from './PostCard';
+import PostCard from './PostCard'; // ✅ Import PostCard component
 
-const PostList = ({ posts, onLike }) => {
+function PostList({ posts, onLike, onAddComment }) {
   return (
-    <div className="post-list">
-      {posts.map((post) => (
+    <div>
+      {posts.map(post => (
         <PostCard
           key={post.id}
-          post={post}
-          onLike={() => onLike(post.id)} // ✅ pass the post ID!
+          username={post.username}
+          imageUrl={post.imageUrl}
+          caption={post.caption}
+          likes={post.likes}
+          comments={post.comments} // ✅ Pass comments array
+          onLike={() => onLike(post.id)} // ✅ Like handler
+          onAddComment={(comment) => onAddComment(post.id, comment)} // ✅ Comment handler
         />
       ))}
     </div>
   );
-};
+}
 
 export default PostList;

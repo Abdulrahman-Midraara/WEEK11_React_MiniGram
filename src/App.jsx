@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Home, PlusSquare, Heart, User } from 'lucide-react';
-import PostList from './components/PostList'; // ✅ Import PostList
+import PostList from './components/PostList'; // ✅ Import PostList component
 
+// ✅ Initial posts array with image, caption, and likes
 const initialPosts = [
   {
     id: 1,
@@ -27,18 +28,33 @@ const initialPosts = [
 ];
 
 function App() {
-  const [posts, setPosts] = useState(initialPosts); // ✅ Step 1: Add state
+  // ✅ State: Add comment array to each post
+  const [posts, setPosts] = useState(
+    initialPosts.map(post => ({ ...post, comments: [] }))
+  );
 
+  // ✅ Function: Increase like count for a post
   const handleLike = (postId) => {
-    // ✅ Step 2: Update like count
     const updatedPosts = posts.map(post =>
       post.id === postId ? { ...post, likes: post.likes + 1 } : post
     );
     setPosts(updatedPosts);
   };
 
+  // ✅ Function: Add a new comment to a post
+  const handleAddComment = (postId, newComment) => {
+    setPosts(prevPosts =>
+      prevPosts.map(post =>
+        post.id === postId
+          ? { ...post, comments: [...post.comments, newComment] }
+          : post
+      )
+    );
+  };
+
   return (
     <div className="app">
+      {/* ✅ App Header with icons */}
       <header className="header">
         <div className="header-content">
           <h1 className="header-title">MiniGram</h1>
@@ -51,8 +67,8 @@ function App() {
         </div>
       </header>
 
-      {/* ✅ Step 3: Render PostList with props */}
-      <PostList posts={posts} onLike={handleLike} />
+      {/* ✅ Render posts via PostList, with all props */}
+      <PostList posts={posts} onLike={handleLike} onAddComment={handleAddComment} />
     </div>
   );
 }
